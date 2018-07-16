@@ -10,6 +10,7 @@ from matplotlib.colors import ListedColormap
 import pandas as pd
 import math
 import numpy as np
+#For the part about kernel trick
 #lets make some variables
 x = [i**2 for i in range(1, 13)]#x^2
 yes = [i-2 for i in range(1, 13)]
@@ -32,7 +33,7 @@ plt.title('response over time')
 
 #lets try making circles
 from sklearn.datasets import make_circles
-X, y = make_circles(n_samples=1000, noise=0.03, random_state=0)
+X, y = make_circles(n_samples=1000, noise=0.075, random_state=0)
 plt.scatter(X[:,0], X[:,1], c=y, cmap = ListedColormap(('red', 'blue')))
 
 #create train_test set
@@ -45,6 +46,11 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, rando
 from sklearn.linear_model import LogisticRegression
 circles_classifier = LogisticRegression()
 circles_classifier.fit(X_train, y_train)
+y_hat = circles_classifier.predict(X_test)
+from sklearn.metrics import confusion_matrix, classification_report
+cm = confusion_matrix(y_test, y_hat)
+print(classification_report(y_test, y_hat, target_names=['0', '1']))
+
 
 #plot it:
 # Visualising the decision boundary
@@ -70,6 +76,11 @@ plt.show()
 from sklearn import svm
 circles_classifier = svm.SVC(kernel='rbf')
 circles_classifier.fit(X_train, y_train)
+#do some predictions and get some statistics
+y_hat = circles_classifier.predict(X_test)
+from sklearn.metrics import confusion_matrix, classification_report
+cm = confusion_matrix(y_test, y_hat)
+print(classification_report(y_test, y_hat, target_names=['0', '1']))
 
 from matplotlib.colors import ListedColormap
 X_set, y_set = X_test, y_test
@@ -93,6 +104,12 @@ plt.show()
 from sklearn.tree import DecisionTreeClassifier
 circles_classifier = DecisionTreeClassifier()
 circles_classifier.fit(X_train, y_train)
+#do some predictions and get some statistics
+y_hat = circles_classifier.predict(X_test)
+from sklearn.metrics import confusion_matrix, classification_report
+cm = confusion_matrix(y_test, y_hat)
+print(classification_report(y_test, y_hat, target_names=['0', '1']))
+
 
 from matplotlib.colors import ListedColormap
 X_set, y_set = X_test, y_test
@@ -116,6 +133,11 @@ plt.show()
 from sklearn.ensemble import RandomForestClassifier
 circles_classifier = RandomForestClassifier(n_estimators=100)
 circles_classifier.fit(X_train, y_train)
+#do some predictions and get some statistics
+y_hat = circles_classifier.predict(X_test)
+from sklearn.metrics import confusion_matrix, classification_report
+cm = confusion_matrix(y_test, y_hat)
+print(classification_report(y_test, y_hat, target_names=['0', '1']))
 
 from matplotlib.colors import ListedColormap
 X_set, y_set = X_test, y_test
@@ -369,6 +391,17 @@ kmeans = KMeans(n_clusters=3, random_state=0).fit(X)
 y_hat = kmeans.predict(X)
 plt.scatter(X[:,0], X[:,1], c = y_hat, cmap = ListedColormap(('red', 'green', 'blue')))
 #we can see that its a little harder
+#Random state 55 REAL BAD
+from sklearn.datasets.samples_generator import make_blobs
+X, y = make_blobs(n_samples=100, centers=3, n_features=2, random_state=55)
+#before assigning cluster
+plt.scatter(X[:,0], X[:,1])
+#after assigning clusters
+plt.scatter(X[:,0], X[:,1], c = y, cmap = ListedColormap(('red', 'green', 'blue')))
+from sklearn.cluster import KMeans
+kmeans = KMeans(n_clusters=3, random_state=0).fit(X)
+y_hat = kmeans.predict(X)
+plt.scatter(X[:,0], X[:,1], c = y_hat, cmap = ListedColormap(('red', 'green', 'blue')))
 
 #okay Lets try with circles:
 from sklearn.datasets import make_circles
